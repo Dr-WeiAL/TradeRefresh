@@ -13,6 +13,7 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class RestockEventHandler {
 
@@ -51,8 +52,11 @@ public class RestockEventHandler {
 		Enchantment e = opt.get().getKey();
 		boolean enchatable = e.isDiscoverable() && !e.isTreasureOnly();
 		boolean tradable = e.isTradeable();
+		var id = ForgeRegistries.ENCHANTMENTS.getKey(e);
+		assert id != null;
 		event.getToolTip().add(getComp("enchantable", enchatable));
 		event.getToolTip().add(getComp("tradable", tradable));
+		event.getToolTip().add(Component.literal(id.toString()).withStyle(ChatFormatting.DARK_GRAY));
 	}
 
 	private static MutableComponent getComp(String str, boolean enabled) {
