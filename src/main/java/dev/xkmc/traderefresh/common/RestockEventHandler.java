@@ -1,27 +1,23 @@
 package dev.xkmc.traderefresh.common;
 
 import dev.xkmc.traderefresh.init.TRConfig;
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
+import dev.xkmc.traderefresh.init.TradeRefresh;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityEvent;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
+
+@EventBusSubscriber(modid = TradeRefresh.MODID, bus = EventBusSubscriber.Bus.GAME)
 public class RestockEventHandler {
 
 	@SubscribeEvent
 	public static void onMobInteract(PlayerInteractEvent.EntityInteract event) {
-		if (!TRConfig.COMMON.allowEmeraldBlockForceRestock.get()) return;
+		if (!TRConfig.SERVER.allowEmeraldBlockForceRestock.get()) return;
 		if (event.getItemStack().is(Items.EMERALD_BLOCK) && event.getTarget() instanceof Villager villager) {
 			if (event.getLevel().isClientSide()) {
 				event.setCancellationResult(InteractionResult.SUCCESS);
@@ -43,30 +39,6 @@ public class RestockEventHandler {
 				villager.playSound(SoundEvents.VILLAGER_NO, 1, villager.getVoicePitch());
 			}
 		}
-	}
-
-	@SubscribeEvent
-	public static void onItemTooltip(ItemTooltipEvent event) {
-		if (ModList.get().isLoaded("apotheosis")) return;
-		if (!TRConfig.CLIENT.showEnchProperties.get()) return;
-		if (!event.getItemStack().is(Items.ENCHANTED_BOOK)) return;
-		var map = EnchantmentHelper.getEnchantments(event.getItemStack());
-		if (map.size() != 1) return;
-		var opt = map.entrySet().stream().findFirst();
-		if (opt.isEmpty()) return;
-		Enchantment e = opt.get().getKey();
-		boolean enchatable = e.isDiscoverable() && !e.isTreasureOnly();
-		boolean tradable = e.isTradeable();
-		var id = ForgeRegistries.ENCHANTMENTS.getKey(e);
-		assert id != null;
-		event.getToolTip().add(getComp("enchantable", enchatable));
-		event.getToolTip().add(getComp("tradable", tradable));
-		event.getToolTip().add(Component.literal(id.toString()).withStyle(ChatFormatting.DARK_GRAY));
-	}
-
-	private static MutableComponent getComp(String str, boolean enabled) {
-		return Component.translatable("traderefresh." + str + "." + enabled)
-				.withStyle(enabled ? ChatFormatting.DARK_GREEN : ChatFormatting.DARK_RED);
 	}
 
 }

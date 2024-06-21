@@ -34,7 +34,7 @@ public class RefreshButton extends Button {
 
 	@Override
 	public void renderWidget(GuiGraphics g, int pMouseX, int pMouseY, float pPartialTick) {
-		this.active = TRConfig.COMMON.alwaysAllowRefresh.get() || parent.getMenu().getTraderXp() == 0;
+		this.active = TRConfig.SERVER.alwaysAllowRefresh.get() || parent.getMenu().getTraderXp() == 0;
 		super.renderWidget(g, pMouseX, pMouseY, pPartialTick);
 	}
 }

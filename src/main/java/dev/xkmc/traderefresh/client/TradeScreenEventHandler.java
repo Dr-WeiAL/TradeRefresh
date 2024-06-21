@@ -4,9 +4,12 @@ import dev.xkmc.traderefresh.init.Keys;
 import dev.xkmc.traderefresh.init.TradeRefresh;
 import dev.xkmc.traderefresh.network.RefreshToServer;
 import net.minecraft.client.gui.screens.inventory.MerchantScreen;
-import net.minecraftforge.client.event.ScreenEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.ScreenEvent;
 
+@EventBusSubscriber(value = Dist.CLIENT, modid = TradeRefresh.MODID, bus = EventBusSubscriber.Bus.GAME)
 public class TradeScreenEventHandler {
 
 	@SubscribeEvent
@@ -17,7 +20,7 @@ public class TradeScreenEventHandler {
 	}
 
 	@SubscribeEvent
-	public static void onKeyPressed(ScreenEvent.KeyPressed evt) {
+	public static void onKeyPressed(ScreenEvent.KeyPressed.Pre evt) {
 		if (evt.getScreen() instanceof MerchantScreen gui && gui.getMenu().getTraderXp() == 0) {
 			if (Keys.REFRESH.map.matches(evt.getKeyCode(), evt.getScanCode()))
 				TradeRefresh.HANDLER.toServer(new RefreshToServer());
