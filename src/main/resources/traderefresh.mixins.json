@@ -5,12 +5,13 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "traderefresh.refmap.json",
   "mixins": [
-    "EnchantmentMixin"
+	"EnchantmentMixin",
+	"VillagerAccessor"
   ],
   "client": [
   ],
   "injectors": {
-    "defaultRequire": 1
+	"defaultRequire": 1
   },
   "minVersion": "0.8"
 }

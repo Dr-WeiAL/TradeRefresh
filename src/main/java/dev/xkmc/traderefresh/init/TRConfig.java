@@ -13,12 +13,20 @@ public class TRConfig {
 
 	public static class Client {
 
+		public final ForgeConfigSpec.BooleanValue showEnchProperties;
+
 		Client(ForgeConfigSpec.Builder builder) {
+			showEnchProperties = builder.comment("Show enchantment properties like tradeable and enchantable")
+					.comment("Will not work when Apotheosis is installed")
+					.define("showEnchProperties", true);
 		}
 
 	}
 
 	public static class Common {
+
+		public final ForgeConfigSpec.BooleanValue alwaysAllowRefresh;
+		public final ForgeConfigSpec.BooleanValue allowEmeraldBlockForceRestock;
 
 		public final ForgeConfigSpec.BooleanValue banAllTradeEnchantmentsByDefault;
 		public final ForgeConfigSpec.ConfigValue<List<String>> tradeNamespaceBlacklist;
@@ -33,6 +41,12 @@ public class TRConfig {
 		public final ForgeConfigSpec.ConfigValue<List<String>> tableIdWhitelist;
 
 		Common(ForgeConfigSpec.Builder builder) {
+			alwaysAllowRefresh = builder.comment("Always allow refreshing trade.")
+					.comment(" Only trades added at current villager level will be refreshed.")
+					.define("alwaysAllowRefresh", false);
+			allowEmeraldBlockForceRestock = builder.comment("Allow player to use emerald block to force restock")
+					.define("allowEmeraldBlockForceRestock", true);
+
 			banAllTradeEnchantmentsByDefault = builder.define("banAllTradeEnchantmentsByDefault", false);
 			tradeNamespaceBlacklist = builder.define("tradeNamespaceBlacklist", new ArrayList<>(List.of()));
 			tradeNamespaceWhitelist = builder.define("tradeNamespaceWhitelist", new ArrayList<>(List.of("minecraft")));

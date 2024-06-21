@@ -1,5 +1,6 @@
 package dev.xkmc.traderefresh.client;
 
+import dev.xkmc.traderefresh.init.TRConfig;
 import dev.xkmc.traderefresh.init.TradeRefresh;
 import dev.xkmc.traderefresh.network.RefreshToServer;
 import net.minecraft.client.gui.GuiGraphics;
@@ -33,7 +34,7 @@ public class RefreshButton extends Button {
 
 	@Override
 	public void renderWidget(GuiGraphics g, int pMouseX, int pMouseY, float pPartialTick) {
-		this.active = parent.getMenu().getTraderXp() == 0;
+		this.active = TRConfig.COMMON.alwaysAllowRefresh.get() || parent.getMenu().getTraderXp() == 0;
 		super.renderWidget(g, pMouseX, pMouseY, pPartialTick);
 	}
 }
